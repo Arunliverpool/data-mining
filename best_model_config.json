@@ -1,0 +1,21 @@
+{
+  "model_name": "RandomForest",
+  "best_params": {
+    "clf__class_weight": "balanced_subsample",
+    "clf__max_depth": 20,
+    "clf__max_features": "sqrt",
+    "clf__n_estimators": 400
+  },
+  "cv_mean_f1": 0.649716,
+  "cv_std_f1": 0.016803,
+  "cv_mean_accuracy": 0.816639,
+  "cv_std_accuracy": 0.011713,
+  "preprocess": {
+    "scale": "standard",
+    "outlier": "iforest",
+    "num_impute": "mean",
+    "cat_impute": "most_frequent"
+  },
+  "cv_folds": 5,
+  "seed": 42
+}

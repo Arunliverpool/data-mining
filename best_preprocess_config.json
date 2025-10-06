@@ -1,0 +1,8 @@
+{
+  "scale": "standard",
+  "outlier": "iforest",
+  "num_impute": "mean",
+  "cat_impute": "most_frequent",
+  "f1_mean": 0.5762390271881414,
+  "f1_std": 0.02164385776544419
+}

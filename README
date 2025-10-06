@@ -1,0 +1,8 @@
+| Imputation (num/cat) | Scaling  | Outliers | mean F1 | std F1 | Notes             |
+| -------------------- | -------- | -------- | ------: | -----: | ----------------- |
+| mean / mode          | none     | none     |         |        | baseline          |
+| median / mode        | standard | none     |         |        | k-NN-friendly     |
+| mean / mode          | min-max  | none     |         |        |                   |
+| mean / mode          | robust   | none     |         |        | outlier-resistant |
+| (best so far)        | (best)   | iForest  |         |        | compare vs none   |
+| (best so far)        | (best)   | LOF      |         |        | compare vs none   |
