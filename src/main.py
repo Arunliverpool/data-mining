@@ -21,13 +21,18 @@ TARGET_COL          = "Target (Col44)"
 SEED_DEFAULT        = 42
 CV_DEFAULT          = 5
 EXPECTED_TEST_ROWS  = 2713
+import os
 
-# Paths (relative to this file)
-HERE        = os.path.dirname(os.path.abspath(__file__))
-TRAIN_PATH  = os.path.join(HERE, "train.csv")
-TEST_PATH   = os.path.join(HERE, "test_data.csv")
-CONFIG_PATH = os.path.join(HERE, "best_model_config.json")
-SID         = "s4755276"   # <- set your student ID here
+# --- Paths (src file lives in /src)
+HERE      = os.path.dirname(os.path.abspath(__file__))         # .../project/src
+ROOT      = os.path.abspath(os.path.join(HERE, ".."))          # .../project
+DATA_DIR  = os.path.join(ROOT, "datasets")                      # .../project/datasets
+
+TRAIN_PATH  = os.path.join(DATA_DIR, "train.csv")               # NOT "train_data.csv"
+TEST_PATH   = os.path.join(DATA_DIR, "test_data.csv")
+CONFIG_PATH = os.path.join(HERE, "best_model_config.json")      # store JSON under /src
+SID         = "s4755276"                                        # your student ID
+
 
 # Fallback winner (used if best_model_config.json is missing)
 FINAL_FALLBACK = {
@@ -118,8 +123,8 @@ def main():
         print(f"[WARN] expected {EXPECTED_TEST_ROWS} test rows; got {len(X_test)} (continuing).")
     preds = pipe.predict(X_test).astype(int)
 
-    # --- write report
-    out_name = os.path.join(HERE, f"{SID}.infs4203")
+
+    out_name = os.path.join(ROOT, f"{SID}.infs4203")    # write outside src
     write_infs4203_file(out_name, preds, acc_cv, f1_cv)
     print(f"[DONE] Wrote {out_name}")
 

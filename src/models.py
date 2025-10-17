@@ -12,6 +12,18 @@ from sklearn.neighbors import KNeighborsClassifier
 from sklearn.naive_bayes import GaussianNB
 
 from preprocess import build_preprocessor
+import os
+
+# --- Paths (src file lives in /src)
+HERE      = os.path.dirname(os.path.abspath(__file__))         # .../project/src
+ROOT      = os.path.abspath(os.path.join(HERE, ".."))          # .../project
+DATA_DIR  = os.path.join(ROOT, "datasets")                      # .../project/datasets
+
+TRAIN_PATH  = os.path.join(DATA_DIR, "train.csv")               # NOT "train_data.csv"
+TEST_PATH   = os.path.join(DATA_DIR, "test_data.csv")
+CONFIG_PATH = os.path.join(HERE, "best_model_config.json")      # store JSON under /src
+SID         = "s4755276"                                        # your student ID
+
 
 TARGET_COL = "Target (Col44)"
 
@@ -53,13 +65,14 @@ MODEL_GRIDS = {
 
 def main():
     ap = argparse.ArgumentParser(description="Exhaustive comparison: preprocess × model grids")
-    ap.add_argument("--train", default="train.csv")
-    ap.add_argument("--seed", type=int, default=42)
-    ap.add_argument("--cv", type=int, default=5)
-    ap.add_argument("--scalers", default="standard,minmax")
+    ap.add_argument("--train",    default=TRAIN_PATH)
+    ap.add_argument("--seed",     type=int, default=42)
+    ap.add_argument("--cv",       type=int, default=5)
+    ap.add_argument("--scalers",  default="standard,minmax")
     ap.add_argument("--outliers", default="none,iforest,lof")
-    ap.add_argument("--out", default="best_model_config.json")
+    ap.add_argument("--out",      default=CONFIG_PATH)  # JSON saved in /src
     args = ap.parse_args()
+
 
     df = pd.read_csv(args.train)
     y  = pd.to_numeric(df[TARGET_COL], errors="raise").astype(int).values
