@@ -1,38 +1,56 @@
 
-** INFS4203 – Classification Project (s4755276) **
+# INFS4203 – Classification Project (s4755276)
 
-This repository contains everything needed to reproduce my submitted report s4755276.infs4203, plus the full code for preprocessing, model selection, hyperparameter tuning, training, testing, and report generation.
-Final choices (used to produce the report)
-Preprocessing
-Numeric: SimpleImputer(strategy="median", add_indicator=True") → MinMaxScaler
-Categorical: SimpleImputer(strategy="most_frequent") → OneHotEncoder(handle_unknown="ignore")
-Extra feature: Local Outlier Factor (LOF) score appended as outlier_score
-(fitted inside each CV fold on imputed+scaled numerics to avoid leakage)
-Classifier
-RandomForestClassifier with:
-n_estimators=200
-max_depth=20
-min_samples_leaf=4
-min_samples_split=10
-class_weight="balanced_subsample"
-max_features="sqrt"
-Evaluation
-5-fold Stratified CV, seed 42
-Metrics: Accuracy and F1 (binary, pos_label = 1)
-The mean CV Accuracy & F1 (binary) are placed on the final line of the report file
+This repository contains everything needed to **reproduce my submitted report** `s4755276.infs4203`, plus the full code for **preprocessing**, **model selection**, **hyperparameter tuning**, **training**, **testing**, and **report generation**.
 
-Environment description
-OS: Linux / macOS / Windows (tested locally)
-Language: Python 3.10+
-Packages:
-pip install numpy pandas scikit-learn
-(Worked with: numpy ≥ 1.24, pandas ≥ 2.0, scikit-learn ≥ 1.2)
-Reproducibility:
-Random seed fixed to 42
-CV folds fixed to 5
-All transforms/models are fit within CV (no global fits before CV)
-Repository / ZIP layout
+---
+
+## Final choices (used to produce the report)
+
+**Preprocessing**
+- Numeric: `SimpleImputer(strategy="median", add_indicator=True")` → **MinMaxScaler**
+- Categorical: `SimpleImputer(strategy="most_frequent")` → `OneHotEncoder(handle_unknown="ignore")`
+- Extra feature: **Local Outlier Factor (LOF)** score appended as `outlier_score`  
+  *(LOF is fit inside each CV fold on imputed+scaled numerics to avoid leakage)*
+
+**Classifier**
+- **RandomForestClassifier** with:
+  - `n_estimators=200`
+  - `max_depth=20`
+  - `min_samples_leaf=4`
+  - `min_samples_split=10`
+  - `class_weight="balanced_subsample"`
+  - `max_features="sqrt"`
+
+**Evaluation**
+- 5-fold **Stratified** CV, seed **42**  
+- Metrics: **Accuracy** and **F1 (binary, pos_label = 1)**  
+- The mean CV Accuracy & F1 (binary) are placed on the final line of the report file.
+
+---
+
+## Environment description
+
+- OS: Linux / macOS / Windows (tested locally)
+- Language: **Python 3.10+**
+- Packages:
+  ```bash
+  pip install numpy pandas scikit-learn
+  ```
+  *(Worked with: numpy ≥ 1.24, pandas ≥ 2.0, scikit-learn ≥ 1.2)*
+
+- Reproducibility:
+  - Random seed fixed to **42**
+  - CV folds fixed to **5**
+  - All transforms/models are fit **within** CV (no global fits before CV)
+
+---
+
+## Repository / ZIP layout
+
 Your ZIP should look like:
+
+```
 s4755276.zip
 ├─ s4755276.infs4203          # the same report submitted to “Report” (MUST be at ZIP root)
 ├─ README.md                  # or README.txt
@@ -44,54 +62,88 @@ s4755276.zip
    ├─ tune_search.py          # full comparison: preprocess variants × model grids
    ├─ preprocess_utils.py     # build_preprocessor(), OutlierScoreAppender, OHE helper
    └─ best_model_config.json  # saved winner from tune_search.py (loaded by main.py)
-Include the training and test CSVs in datasets/.
-If using Python, submit .py files only (no notebooks).
-Reproduction instructions
-0) Setup
+```
+
+> Include the **training** and **test** CSVs in `datasets/`.  
+> If using Python, submit **.py files only** (no notebooks).
+
+---
+
+## Reproduction instructions
+
+### 0) Setup
+```bash
 python -m venv .venv
 # Windows: .venv\Scripts\activate
 # macOS/Linux:
 source .venv/bin/activate
 pip install numpy pandas scikit-learn
-1) Regenerate my report (final locked pipeline)
+```
+
+### 1) Regenerate my report (final locked pipeline)
+
 From the project root:
+```bash
 python src/main.py
+```
+
 This will:
-Load datasets/train.csv and datasets/test_data.csv
-Build the final preprocessor + model (MinMax + LOF + RF with the params above)
-Run 5-fold CV → Accuracy and F1 (binary, pos=1)
-Fit on the full training data
-Predict integer labels for all 2713 test rows
-Write the report s4755276.infs4203 to the project root (outside src/)
-Report format (strict)
-Total 2,714 lines:
-Lines 1–2713: predictions as 0, or 1,
-Line 2714: accuracy,f1, (both to 3 decimals)
-Every line ends with a comma.
-2) (Optional) Re-run the full comparison and lock a new winner
+1. Load `datasets/train.csv` and `datasets/test_data.csv`  
+2. Build the **final preprocessor + model** (MinMax + LOF + RF with the params above)  
+3. Run **5-fold CV** → **Accuracy** and **F1 (binary, pos=1)**  
+4. Fit on the full training data  
+5. Predict integer labels for all **2713** test rows  
+6. Write the report **`s4755276.infs4203`** to the **project root** (outside `src/`)
+
+**Report format (strict)**  
+- Total **2,714** lines:
+  - Lines **1–2713**: predictions as `0,` or `1,`
+  - Line **2714**: `accuracy,f1,` (both to **3 decimals**)  
+- **Every** line ends with a comma.
+
+### 2) (Optional) Re-run the full comparison and lock a new winner
+
+```bash
 python src/tune_search.py
+```
+
 Artifacts produced:
-preprocess_cv_results.csv – ranked preprocessing variants by CV F1
-model_cv_results.csv – ranked models (on the best preprocessor) by CV F1
-src/best_model_config.json – locked preprocessor + model + hyperparameters
-Then regenerate the report (main will auto-load best_model_config.json):
+- `preprocess_cv_results.csv` – ranked preprocessing variants by CV F1  
+- `model_cv_results.csv` – ranked models (on the best preprocessor) by CV F1  
+- `src/best_model_config.json` – locked preprocessor + model + hyperparameters
+
+Then regenerate the report (main will auto-load `best_model_config.json`):
+```bash
 python src/main.py
-Selection & tuning summary (actual results)
-Model ranking (on best preprocessor)
-model	mean F1	std F1	best params (key)
-RandomForest	0.6615	0.0143	n_estimators=200, max_depth=20, min_samples_leaf=4, min_samples_split=10, class_weight=balanced_subsample, max_features=sqrt
-DecisionTree	0.6070	0.0089	criterion=gini, max_depth=10, class_weight=balanced
-GaussianNB	0.4782	0.0063	var_smoothing=1e-7
-kNN	0.4683	0.0144	n_neighbors=5, weights=uniform, metric=euclidean
-Preprocessing variant scan (RF baseline)
-scaler	outlier	mean F1	std F1
-minmax	lof	0.6488	0.0153
-standard	lof	0.6475	0.0149
-standard	none	0.6451	0.0169
-minmax	none	0.6435	0.0168
-standard	iforest	0.6433	0.0228
-minmax	iforest	0.6428	0.0230
-Locked config (saved in src/best_model_config.json)
+```
+
+---
+
+## Selection & tuning summary (actual results)
+
+**Model ranking (on best preprocessor)**
+
+| model         | mean F1 | std F1  | best params (key) |
+|---------------|--------:|--------:|-------------------|
+| RandomForest  | 0.6615  | 0.0143  | `n_estimators=200, max_depth=20, min_samples_leaf=4, min_samples_split=10, class_weight=balanced_subsample, max_features=sqrt` |
+| DecisionTree  | 0.6070  | 0.0089  | `criterion=gini, max_depth=10, class_weight=balanced` |
+| GaussianNB    | 0.4782  | 0.0063  | `var_smoothing=1e-7` |
+| kNN           | 0.4683  | 0.0144  | `n_neighbors=5, weights=uniform, metric=euclidean` |
+
+**Preprocessing variant scan (RF baseline)**
+
+| scaler   | outlier | mean F1 | std F1 |
+|----------|---------|--------:|-------:|
+| minmax   | lof     | 0.6488  | 0.0153 |
+| standard | lof     | 0.6475  | 0.0149 |
+| standard | none    | 0.6451  | 0.0169 |
+| minmax   | none    | 0.6435  | 0.0168 |
+| standard | iforest | 0.6433  | 0.0228 |
+| minmax   | iforest | 0.6428  | 0.0230 |
+
+**Locked config (saved in `src/best_model_config.json`)**
+
+```json
 {
   "preprocess_choice": { "scale": "minmax", "outlier": "lof" },
   "winner_model": "RandomForest",
@@ -107,28 +159,70 @@ Locked config (saved in src/best_model_config.json)
   "cv_std_f1": 0.014318237147483523,
   "cv": { "n_splits": 5, "seed": 42 }
 }
-Additional justifications
-Why LOF?
-In the variant scan, adding an LOF outlier score to numerics improved mean F1 versus none and iforest for both scalers. LOF + MinMax produced the top F1 with good stability (std ≈ 0.015).
-Leakage avoidance
-The outlier model (IF/LOF) is fit inside each CV fold (after numeric imputation+scaling) and only its scores are appended for that fold. No fitting on full data before CV.
-Why RandomForest?
-It achieved the highest mean F1 on the best preprocessor and had low variance across folds. The grid was intentionally compact (course-level scope) and reproducible.
-Binary F1 in marking
-All evaluation uses F1 (binary) with positive class = 1, aligning with marking guidance.
-Training, evaluation, and testing code (where things are)
-Main entry (src/main.py) – has a main() and executes the overall process:
-Load → Preprocess → Train → 5-fold CV (Accuracy & F1 binary) → Fit full train → Predict test → Write report
-Seeds fixed: 42; CV: 5
-Preprocessing utilities (src/preprocess_utils.py):
-build_preprocessor() – ColumnTransformer for numerics/categoricals (+ optional outlier_score)
-OutlierScoreAppender – safely computes IF/LOF scores within CV
-Selection & tuning (src/tune_search.py):
-Preprocess variant scan (RF baseline)
-Model grid search on the best preprocessor
-Saves src/best_model_config.json with the winner (used by main.py)
-Seeds fixed: 42; CV: 5
-AI-assistance disclosure
-Tool: GPT-5 Thinking (ChatGPT)
-Used for: repository scaffolding; argparse/path defaults; report writer function (format/rounding/commas); preprocessing utilities (OutlierScoreAppender, build_preprocessor); README structure.
-All code was reviewed locally; experiments and final outputs were produced on my machine.
+```
+
+---
+
+## Additional justifications
+
+- **Why LOF?**  
+  In the variant scan, adding an **LOF outlier score** to numerics improved mean F1 versus `none` and `iforest` for both scalers. LOF + MinMax produced the top F1 with good stability (std ≈ 0.015).
+
+- **Leakage avoidance**  
+  The outlier model (IF/LOF) is fit **inside** each CV fold (after numeric imputation+scaling) and only its **scores** are appended for that fold. No fitting on full data before CV.
+
+- **Why RandomForest?**  
+  It achieved the highest mean F1 on the best preprocessor and had low variance across folds. The grid was intentionally compact (course-level scope) and reproducible.
+
+- **Binary F1 in marking**  
+  All evaluation uses **F1 (binary)** with **positive class = 1**, aligning with marking guidance.
+
+---
+
+## Training, evaluation, and testing code (where things are)
+
+- **Main entry** (`src/main.py`) – **has a `main()`** and executes the overall process:  
+  Load → Preprocess → Train → **5-fold CV (Accuracy & F1 binary)** → Fit full train → Predict test → Write report  
+  Seeds fixed: **42**; CV: **5**
+
+- **Preprocessing utilities** (`src/preprocess_utils.py`):  
+  `build_preprocessor()` – ColumnTransformer for numerics/categoricals (+ optional `outlier_score`)  
+  `OutlierScoreAppender` – safely computes IF/LOF scores within CV
+
+- **Selection & tuning** (`src/tune_search.py`):  
+  Preprocess variant scan (RF baseline) → Model grid search on the best preprocessor → Save `src/best_model_config.json`
+
+---
+
+## AI-assistance disclosure
+
+- Tool: **GPT-5 Thinking (ChatGPT)**  
+- Used for: repository scaffolding; argparse/path defaults; report writer function (format/rounding/commas); preprocessing utilities; README structure.  
+- All code was reviewed locally; experiments and final outputs were produced on my machine.
+
+---
+
+## Submission checklist
+
+- [x] **Report** `s4755276.infs4203` is at the **ZIP root** (and also submitted to the Report link)  
+- [x] **README** (this file) at the ZIP root  
+- [x] **All code** (`src/main.py`, `src/preprocess_utils.py`, `src/tune_search.py`, and any helpers) – **.py only**  
+- [x] **Data** – `datasets/train.csv`, `datasets/test_data.csv`  
+- [x] **Seeds fixed** (42) and **CV** (5) declared for reproducibility
+
+---
+
+## (Optional) Report format validator
+
+```python
+def validate_report(path, expected_test_rows=2713):
+    with open(path, "r", encoding="utf-8") as f:
+        lines = [ln.rstrip("\n") for ln in f.readlines()]
+    assert len(lines) == expected_test_rows + 1, f"Expected {expected_test_rows+1}, got {len(lines)}"
+    for i, ln in enumerate(lines[:expected_test_rows], 1):
+        assert ln in {"0,", "1,"}, f"Line {i} must be '0,' or '1,', got {ln!r}"
+    last = lines[-1]
+    assert last.endswith(","), "Final line must end with a comma"
+    a, b = last[:-1].split(",")
+    float(a); float(b)  # numeric check
+```
