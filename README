@@ -1,5 +1,5 @@
 
-# INFS4203 – Classification Project (s4755276)
+### INFS4203 – Classification Project (s4755276)
 
 This repository contains everything needed to **reproduce my submitted report** `s4755276.infs4203`, plus the full code for **preprocessing**, **model selection**, **hyperparameter tuning**, **training**, **testing**, and **report generation**.
 
@@ -226,3 +226,4 @@ def validate_report(path, expected_test_rows=2713):
     a, b = last[:-1].split(",")
     float(a); float(b)  # numeric check
 ```
+
