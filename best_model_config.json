@@ -1,21 +1,24 @@
 {
-  "model_name": "RandomForest",
+  "preprocess_choice": {
+    "scale": "minmax",
+    "outlier": "lof"
+  },
+  "winner_model": "RandomForest",
   "best_params": {
     "clf__class_weight": "balanced_subsample",
     "clf__max_depth": 20,
-    "clf__max_features": "sqrt",
-    "clf__n_estimators": 400
+    "clf__min_samples_leaf": 4,
+    "clf__min_samples_split": 10,
+    "clf__n_estimators": 200
   },
-  "cv_mean_f1": 0.649716,
-  "cv_std_f1": 0.016803,
-  "cv_mean_accuracy": 0.816639,
-  "cv_std_accuracy": 0.011713,
-  "preprocess": {
-    "scale": "standard",
-    "outlier": "iforest",
-    "num_impute": "mean",
-    "cat_impute": "most_frequent"
+  "cv_mean_f1": 0.6615266364432273,
+  "cv_std_f1": 0.014318237147483523,
+  "cv_eval": {
+    "mean_accuracy": 0.8059513443867317,
+    "mean_f1": 0.6615266364432273
   },
-  "cv_folds": 5,
-  "seed": 42
+  "cv": {
+    "n_splits": 5,
+    "seed": 42
+  }
 }
