@@ -59,9 +59,9 @@ s4755276.zip
 │  └─ test_data.csv
 └─ src/
    ├─ main.py                 # FINAL locked pipeline (has a main())
-   ├─ tune_search.py          # full comparison: preprocess variants × model grids
-   ├─ preprocess_utils.py     # build_preprocessor(), OutlierScoreAppender, OHE helper
-   └─ best_model_config.json  # saved winner from tune_search.py (loaded by main.py)
+   ├─ model.py          # full comparison: preprocess variants × model grids
+   ├─ preprocess.py     # build_preprocessor(), OutlierScoreAppender, OHE helper
+   └─ best_model_config.json  # saved winner from model.py (loaded by main.py)
 ```
 
 > Include the **training** and **test** CSVs in `datasets/`.  
@@ -104,7 +104,7 @@ This will:
 ### 2) (Optional) Re-run the full comparison and lock a new winner
 
 ```bash
-python src/tune_search.py
+python src/models.py
 ```
 
 Artifacts produced:
@@ -185,11 +185,11 @@ python src/main.py
   Load → Preprocess → Train → **5-fold CV (Accuracy & F1 binary)** → Fit full train → Predict test → Write report  
   Seeds fixed: **42**; CV: **5**
 
-- **Preprocessing utilities** (`src/preprocess_utils.py`):  
+- **Preprocessing utilities** (`src/preprocess.py`):  
   `build_preprocessor()` – ColumnTransformer for numerics/categoricals (+ optional `outlier_score`)  
   `OutlierScoreAppender` – safely computes IF/LOF scores within CV
 
-- **Selection & tuning** (`src/tune_search.py`):  
+- **Selection & tuning** (`src/model.py`):  
   Preprocess variant scan (RF baseline) → Model grid search on the best preprocessor → Save `src/best_model_config.json`
 
 ---
@@ -206,24 +206,10 @@ python src/main.py
 
 - [x] **Report** `s4755276.infs4203` is at the **ZIP root** (and also submitted to the Report link)  
 - [x] **README** (this file) at the ZIP root  
-- [x] **All code** (`src/main.py`, `src/preprocess_utils.py`, `src/tune_search.py`, and any helpers) – **.py only**  
+- [x] **All code** (`src/main.py`, `src/preprocess.py`, `src/model.py`, and any helpers) – **.py only**  
 - [x] **Data** – `datasets/train.csv`, `datasets/test_data.csv`  
 - [x] **Seeds fixed** (42) and **CV** (5) declared for reproducibility
 
 ---
 
-## (Optional) Report format validator
-
-```python
-def validate_report(path, expected_test_rows=2713):
-    with open(path, "r", encoding="utf-8") as f:
-        lines = [ln.rstrip("\n") for ln in f.readlines()]
-    assert len(lines) == expected_test_rows + 1, f"Expected {expected_test_rows+1}, got {len(lines)}"
-    for i, ln in enumerate(lines[:expected_test_rows], 1):
-        assert ln in {"0,", "1,"}, f"Line {i} must be '0,' or '1,', got {ln!r}"
-    last = lines[-1]
-    assert last.endswith(","), "Final line must end with a comma"
-    a, b = last[:-1].split(",")
-    float(a); float(b)  # numeric check
-```
 
