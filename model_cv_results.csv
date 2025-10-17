@@ -1,5 +1,5 @@
 model,f1_mean,f1_std,params
-RandomForest,0.6615266364432273,0.014318237147483523,"{'clf__class_weight': 'balanced_subsample', 'clf__max_depth': 20, 'clf__min_samples_leaf': 4, 'clf__min_samples_split': 10, 'clf__n_estimators': 200}"
+RandomForest,0.6615266364432273,0.014318237147483523,"{'clf__class_weight': 'balanced_subsample', 'clf__max_depth': 20, 'clf__max_features': 'sqrt', 'clf__min_samples_leaf': 4, 'clf__min_samples_split': 10, 'clf__n_estimators': 200}"
 DecisionTree,0.6069641935711294,0.008863114124680816,"{'clf__class_weight': 'balanced', 'clf__criterion': 'gini', 'clf__max_depth': 10, 'clf__min_samples_leaf': 1, 'clf__min_samples_split': 2}"
 GaussianNB,0.4782379957776358,0.006344267786601285,{'clf__var_smoothing': 1e-07}
-kNN,0.4683131364133537,0.014378993400786811,"{'clf__n_neighbors': 5, 'clf__weights': 'uniform'}"
+kNN,0.4683131364133537,0.014378993400786811,"{'clf__metric': 'euclidean', 'clf__n_neighbors': 5, 'clf__weights': 'uniform'}"

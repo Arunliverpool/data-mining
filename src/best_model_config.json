@@ -1,0 +1,21 @@
+{
+  "preprocess_choice": {
+    "scale": "minmax",
+    "outlier": "lof"
+  },
+  "winner_model": "RandomForest",
+  "best_params": {
+    "clf__class_weight": "balanced_subsample",
+    "clf__max_depth": 20,
+    "clf__max_features": "sqrt",
+    "clf__min_samples_leaf": 4,
+    "clf__min_samples_split": 10,
+    "clf__n_estimators": 200
+  },
+  "cv_mean_f1": 0.6615266364432273,
+  "cv_std_f1": 0.014318237147483523,
+  "cv": {
+    "n_splits": 5,
+    "seed": 42
+  }
+}
