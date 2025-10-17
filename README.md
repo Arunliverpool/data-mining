@@ -27,6 +27,15 @@ This repository contains everything needed to **reproduce my submitted report** 
 - Metrics: **Accuracy** and **F1 (binary, pos_label = 1)**  
 - The mean CV Accuracy & F1 (binary) are placed on the final line of the report file.
 
+** Change CV to 10?
+
+Short answer: you don’t need to. Five folds is perfectly acceptable and common for this level. Going to 10:
+Pros: slightly tighter estimate (lower standard error).
+With your fold std ≈ 0.0143, the standard error of the mean is
+5-fold: ~0.0143/√5 ≈ 0.0064
+10-fold: ~0.0143/√10 ≈ 0.0045
+That’s a small stability gain.
+Cons: ~2× runtime everywhere (preprocess scans + every model grid). No guarantee it changes your ranking or your final score in a meaningful way.
 ---
 
 ## Environment description
@@ -211,5 +220,6 @@ python src/main.py
 - [x] **Seeds fixed** (42) and **CV** (5) declared for reproducibility
 
 ---
+
 
 
