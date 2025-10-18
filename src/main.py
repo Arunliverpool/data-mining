@@ -48,13 +48,13 @@ def write_infs4203_file(path, test_preds, acc_mean, f1_mean):
     with open(path, "w", encoding="utf-8") as f:
         for p in test_preds:
             f.write(f"{int(p)},\n")
-        f.write(f"{acc_mean:.3f},{f1_mean:.3f}\n")
+        f.write(f"{acc_mean:.3f},{f1_mean:.3f},\n")
 
 def _load_locked_config():
     if os.path.exists(CONFIG_PATH):
         with open(CONFIG_PATH, "r") as f:
             cfg = json.load(f)
-        print(f"[INFO] Loaded locked config from {CONFIG_PATH}")
+        print(f"Loaded locked config from {CONFIG_PATH}")
         return cfg
     return FINAL_FALLBACK
 
@@ -109,6 +109,6 @@ def main():
 
     out_name = os.path.join(ROOT, f"{SID}.infs4203")   
     write_infs4203_file(out_name, preds, acc_cv, f1_cv)
-    
+
 if __name__ == "__main__":
     main()
