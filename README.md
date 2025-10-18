@@ -210,21 +210,16 @@ python src/main.py
 ## AI-assistance disclosure
 
 - Tool: **GPT-5 Thinking (ChatGPT)**  
-- Used for: repository scaffolding; path help in file; formating issues. ; README structure.  
+- Used for: repository scaffolding; path help in file formating issues.  README structure. code debug 
 - research on best practices for flow
-- All code was reviewed locally; experiments and final outputs were produced on my machine.
+- All code was reviewed locally and experiments and final outputs were produced on my machine.
 
 ---
 
-## Submission checklist
-
-- [x] **Report** `s4755276.infs4203` is at the **ZIP root** (and also submitted to the Report link)  
-- [x] **README** (this file) at the ZIP root  
-- [x] **All code** (`src/main.py`, `src/preprocess.py`, `src/model.py`, and any helpers) – **.py only**  
-- [x] **Data** – `datasets/train.csv`, `datasets/test_data.csv`  
-- [x] **Seeds fixed** (42) and **CV** (5) declared for reproducibility
+Arunkumar s4755276
 
 ---
+
 
 
 
