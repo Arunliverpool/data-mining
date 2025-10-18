@@ -27,7 +27,7 @@ This repository contains everything needed to **reproduce my submitted report** 
 - Metrics: **Accuracy** and **F1 (binary, pos_label = 1)**  
 - The mean CV Accuracy & F1 (binary) are placed on the final line of the report file.
 
-** Change CV to 10?
+**Change CV to 10?**
 
 Five folds is perfectly acceptable and common for this level. Going to 10:
 - Pros: slightly tighter estimate (lower standard error).
@@ -209,22 +209,20 @@ python src/main.py
 
 ## AI-assistance disclosure
 
-- Tool: **GPT-5 Thinking (ChatGPT)**  
-- Used for: repository scaffolding; path help in file; formating issues. ; README structure.  
+- Tool: (chat-gpt)
+- Used for: repository scaffolding; path help in file formating issues.code debug. README structure. 
 - research on best practices for flow
-- All code was reviewed locally; experiments and final outputs were produced on my machine.
+- All code was reviewed locally and experiments and final outputs were produced on my machine.
 
 ---
 
-## Submission checklist
+Arunkumar s4755276
 
-- [x] **Report** `s4755276.infs4203` is at the **ZIP root** (and also submitted to the Report link)  
-- [x] **README** (this file) at the ZIP root  
-- [x] **All code** (`src/main.py`, `src/preprocess.py`, `src/model.py`, and any helpers) – **.py only**  
-- [x] **Data** – `datasets/train.csv`, `datasets/test_data.csv`  
-- [x] **Seeds fixed** (42) and **CV** (5) declared for reproducibility
 
----
+
+
+
+
 
 
 
