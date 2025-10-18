@@ -10,15 +10,12 @@ import pandas as pd
 
 def OHE():
     try:
-        return OneHotEncoder(handle_unknown="ignore", sparse_output=False)  # sklearn >= 1.4
+        return OneHotEncoder(handle_unknown="ignore", sparse_output=False)  
     except TypeError:
-        return OneHotEncoder(handle_unknown="ignore", sparse=False)         # older sklearn
+        return OneHotEncoder(handle_unknown="ignore", sparse=False)        
 
-class OutlierScoreAppender(BaseEstimator, TransformerMixin):
-    """
-    Adds an outlier score as one extra numeric feature.
-    Fits on numerics only with median -> StandardScaler -> IF/LOF.
-    """
+class outlier_score(BaseEstimator, TransformerMixin):
+
     def __init__(self, num_cols=None, method="none", contamination="auto", n_neighbors=20, random_state=42):
         self.num_cols = num_cols
         self.method = method
@@ -27,10 +24,9 @@ class OutlierScoreAppender(BaseEstimator, TransformerMixin):
         self.random_state = random_state
 
     def fit(self, X, y=None):
-        if not isinstance(X, pd.DataFrame):
-            raise TypeError("OutlierScoreAppender expects a pandas DataFrame")
         self.num_cols_ = list(self.num_cols) if self.num_cols is not None \
             else X.select_dtypes(include=[np.number]).columns.tolist()
+
 
         self._imp = SimpleImputer(strategy="median").fit(X[self.num_cols_])
         Zimp = self._imp.transform(X[self.num_cols_])
@@ -59,7 +55,7 @@ def build_preprocessor(num_cols, cat_cols, scaler_name="minmax", outlier_method=
     scaler = StandardScaler() if scaler_name == "standard" else MinMaxScaler()
     steps = []
     if outlier_method != "none":
-        steps.append(("outlier", OutlierScoreAppender(num_cols=num_cols, method=outlier_method, random_state=seed)))
+        steps.append(("outlier", outlier_score(num_cols=num_cols, method=outlier_method, random_state=seed)))
     num_cols_use = list(num_cols) + (["outlier_score"] if outlier_method != "none" else [])
     ct = ColumnTransformer(
         transformers=[

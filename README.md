@@ -9,7 +9,7 @@ This repository contains everything needed to **reproduce my submitted report** 
 
 **Preprocessing**
 - Numeric: `SimpleImputer(strategy="median", add_indicator=True")` → **MinMaxScaler**
-- Categorical: `SimpleImputer(strategy="most_frequent")` → `OneHotEncoder(handle_unknown="ignore")`
+- Categorical: `SimpleImputer(strategy="most_frequent")` --> `OneHotEncoder(handle_unknown="ignore")`
 - Extra feature: **Local Outlier Factor (LOF)** score appended as `outlier_score`  
   *(LOF is fit inside each CV fold on imputed+scaled numerics to avoid leakage)*
 
@@ -29,13 +29,17 @@ This repository contains everything needed to **reproduce my submitted report** 
 
 ** Change CV to 10?
 
-Short answer: you don’t need to. Five folds is perfectly acceptable and common for this level. Going to 10:
-Pros: slightly tighter estimate (lower standard error).
-With your fold std ≈ 0.0143, the standard error of the mean is
-5-fold: ~0.0143/√5 ≈ 0.0064
-10-fold: ~0.0143/√10 ≈ 0.0045
+Five folds is perfectly acceptable and common for this level. Going to 10:
+- Pros: slightly tighter estimate (lower standard error).
+        With your fold std ≈ 0.0143, the standard error of the mean is
+        
+        5-fold: ~0.0143/√5 ≈ 0.0064
+        10-fold: ~0.0143/√10 ≈ 0.0045
+
 That’s a small stability gain.
-Cons: ~2× runtime everywhere (preprocess scans + every model grid). No guarantee it changes your ranking or your final score in a meaningful way.
+
+- Cons: ~2× runtime everywhere (preprocess scans + every model grid). 
+        No guarantee it changes your ranking or your final score in a meaningful way.
 ---
 
 ## Environment description
@@ -69,13 +73,10 @@ s4755276.zip
 └─ src/
    ├─ main.py                 # FINAL locked pipeline (has a main())
    ├─ model.py          # full comparison: preprocess variants × model grids
-   ├─ preprocess.py     # build_preprocessor(), OutlierScoreAppender, OHE helper
+   ├─ preprocess.py     # build_preprocessor(), outlier_score, OHE helper
    └─ best_model_config.json  # saved winner from model.py (loaded by main.py)
+   
 ```
-
-> Include the **training** and **test** CSVs in `datasets/`.  
-> If using Python, submit **.py files only** (no notebooks).
-
 ---
 
 ## Reproduction instructions
@@ -107,10 +108,10 @@ This will:
 **Report format (strict)**  
 - Total **2,714** lines:
   - Lines **1–2713**: predictions as `0,` or `1,`
-  - Line **2714**: `accuracy,f1,` (both to **3 decimals**)  
-- **Every** line ends with a comma.
+  - Line **2714**: `accuracy,f1`
 
-### 2) (Optional) Re-run the full comparison and lock a new winner
+
+### 2) (Optional) Re-run the full comparison
 
 ```bash
 python src/models.py
@@ -175,13 +176,16 @@ python src/main.py
 ## Additional justifications
 
 - **Why LOF?**  
+  LOF (Local Outlier Factor) is an anomaly detection method based on the density-based technique
   In the variant scan, adding an **LOF outlier score** to numerics improved mean F1 versus `none` and `iforest` for both scalers. LOF + MinMax produced the top F1 with good stability (std ≈ 0.015).
 
 - **Leakage avoidance**  
   The outlier model (IF/LOF) is fit **inside** each CV fold (after numeric imputation+scaling) and only its **scores** are appended for that fold. No fitting on full data before CV.
+  If the outlier model were fitted using the entire dataset before the CV split, the calculation of the outlier score feature for the validation set would implicitly incorporate information derived from the distribution of that validation data itself. This contamination leads to an overly optimistic performance estimate because the model evaluates features that benefited from exposure to the test data during their creation
 
 - **Why RandomForest?**  
-  It achieved the highest mean F1 on the best preprocessor and had low variance across folds. The grid was intentionally compact (course-level scope) and reproducible.
+  It achieved the highest mean F1 on the best preprocessor and had low variance across folds. The grid was intentionally compact and reproducible.
+  Achieving better generalization performance compared to single learners.Random Forest inherently reduces the risk of overfitting compared to a single, deeply grown decision tree
 
 - **Binary F1 in marking**  
   All evaluation uses **F1 (binary)** with **positive class = 1**, aligning with marking guidance.
@@ -196,7 +200,7 @@ python src/main.py
 
 - **Preprocessing utilities** (`src/preprocess.py`):  
   `build_preprocessor()` – ColumnTransformer for numerics/categoricals (+ optional `outlier_score`)  
-  `OutlierScoreAppender` – safely computes IF/LOF scores within CV
+  `outlier_score` – safely computes IF/LOF scores within CV
 
 - **Selection & tuning** (`src/model.py`):  
   Preprocess variant scan (RF baseline) → Model grid search on the best preprocessor → Save `src/best_model_config.json`
@@ -206,7 +210,8 @@ python src/main.py
 ## AI-assistance disclosure
 
 - Tool: **GPT-5 Thinking (ChatGPT)**  
-- Used for: repository scaffolding; argparse/path defaults; report writer function (format/rounding/commas); preprocessing utilities; README structure.  
+- Used for: repository scaffolding; path help in file; formating issues. ; README structure.  
+- research on best practices for flow
 - All code was reviewed locally; experiments and final outputs were produced on my machine.
 
 ---
@@ -220,6 +225,8 @@ python src/main.py
 - [x] **Seeds fixed** (42) and **CV** (5) declared for reproducibility
 
 ---
+
+
 
 
 
