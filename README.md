@@ -209,8 +209,8 @@ python src/main.py
 
 ## AI-assistance disclosure
 
-- Tool: **GPT-5 Thinking (ChatGPT)**  
-- Used for: repository scaffolding; path help in file formating issues.  README structure. code debug 
+- Tool: (chat-gpt)
+- Used for: repository scaffolding; path help in file formating issues.code debug. README structure. 
 - research on best practices for flow
 - All code was reviewed locally and experiments and final outputs were produced on my machine.
 
@@ -218,7 +218,8 @@ python src/main.py
 
 Arunkumar s4755276
 
----
+
+
 
 
 
